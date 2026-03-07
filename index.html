@@ -332,6 +332,10 @@ footer span{color:var(--accent2)}
     <div class="ccard fi"><div class="cico">☕</div><div><p class="cname">Java</p><p class="ciss"><i class="fas fa-award" style="color:var(--accent2)"></i> &nbsp;Cisco</p></div></div>
     <div class="ccard fi"><div class="cico">🐍</div><div><p class="cname">Python</p><p class="ciss"><i class="fas fa-award" style="color:var(--accent2)"></i> &nbsp;HackerRank</p></div></div>
     <div class="ccard fi"><div class="cico">🗄️</div><div><p class="cname">SQL</p><p class="ciss"><i class="fas fa-award" style="color:var(--accent2)"></i> &nbsp;HackerRank</p></div></div>
+    <div class="ccard fi"><div class="cico">🌐</div><div><p class="cname">Django</p><p class="ciss"><i class="fas fa-award" style="color:var(--accent2)"></i> &nbsp;Udemy</p></div></div>
+    <div class="ccard fi"><div class="cico">⚙️</div><div><p class="cname">DevOps</p><p class="ciss"><i class="fas fa-award" style="color:var(--accent2)"></i> &nbsp;Coursera</p></div></div>
+    <div class="ccard fi"><div class="cico">🤖</div><div><p class="cname">Google AI-ML Virtual Internship</p><p class="ciss"><i class="fas fa-briefcase" style="color:var(--accent2)"></i> &nbsp;Google</p></div></div>
+    <div class="ccard fi"><div class="cico">🧠</div><div><p class="cname">Machine Learning Internship</p><p class="ciss"><i class="fas fa-briefcase" style="color:var(--accent2)"></i> &nbsp;HBIC Solutions</p></div></div>
   </div>
 </div></section>
 
@@ -339,23 +343,71 @@ footer span{color:var(--accent2)}
   <p class="slbl fi"></p><h2 class="stit fi">Get In Touch</h2><div class="sln fi"></div>
   <div class="ctgrid">
     <div class="ctinfo fi">
-      <a href="/cdn-cgi/l/email-protection#1b7a70737277707a7f6e756e69725b7c767a727735787476" class="ctitem"><i class="fas fa-envelope"></i><div><strong>Email</strong><br><span><span class="__cf_email__" data-cfemail="95f4fefdfcf9fef4f1e0fbe0e7fcd5f2f8f4fcf9bbf6faf8">[email&#160;protected]</span></span></div></a>
+      <a href="mailto:akhilkadunuri@gmail.com" class="ctitem"><i class="fas fa-envelope"></i><div><strong>Email</strong><br><span>akhilkadunuri@gmail.com</span></div></a>
       <a href="https://github.com/AkhilKadunuri" target="_blank" class="ctitem"><i class="fab fa-github"></i><div><strong>GitHub</strong><br><span>github.com/AkhilKadunuri</span></div></a>
       <a href="https://www.linkedin.com/in/akhil-kadunuri-baba522ab/" target="_blank" class="ctitem"><i class="fab fa-linkedin"></i><div><strong>LinkedIn</strong><br><span>akhil-kadunuri-baba522ab</span></div></a>
     </div>
     <div class="ctform fi">
-      <div class="fg"><label>Your Name</label><input type="text" placeholder="AKhil"/></div>
-      <div class="fg"><label>Your Email</label><input type="email" placeholder="Akhil@example.com"/></div>
-      <div class="fg"><label>Message</label><textarea placeholder="Hi Akhil, I'd like to connect..."></textarea></div>
-      <button class="bp" style="width:fit-content" onclick="hf(event)"><i class="fas fa-paper-plane"></i> Send Message</button>
-      <p id="fm" style="color:var(--accent2);font-size:.85rem;display:none;">✅ Message noted! (Frontend demo)</p>
+      <div class="fg"><label>Your Name</label><input id="from_name" type="text" placeholder="Your name"/></div>
+      <div class="fg"><label>Your Email</label><input id="from_email" type="email" placeholder="your@email.com"/></div>
+      <div class="fg"><label>Message</label><textarea id="message" placeholder="Hi Akhil, I'd like to connect..."></textarea></div>
+      <button class="bp" style="width:fit-content" onclick="sendEmail()"><i class="fas fa-paper-plane"></i> Send Message</button>
+      <p id="fm" style="font-size:.85rem;display:none;margin-top:.5rem;"></p>
     </div>
   </div>
 </div></section>
 
 <footer><p>Designed &amp; Built by <span>Akhil Kadunuri</span> &nbsp;·&nbsp; 2024</p><p style="margin-top:.5rem;font-size:.8rem;">Made with <span>♥</span> using HTML, CSS &amp; JavaScript</p></footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script data-cfasync="false"></script><script>
+// ── EmailJS Setup ──
+// STEP 1: Go to https://www.emailjs.com and create a free account
+// STEP 2: Add an Email Service (Gmail) → copy your Service ID below
+// STEP 3: Create an Email Template with variables: {{from_name}}, {{from_email}}, {{message}} → copy Template ID below
+// STEP 4: Go to Account → API Keys → copy your Public Key below
+emailjs.init("_NMGk-mfEkIunWrQx"); // 🔑 Replace with your EmailJS Public Key
+
+function sendEmail() {
+  const name = document.getElementById('from_name').value.trim();
+  const email = document.getElementById('from_email').value.trim();
+  const message = document.getElementById('message').value.trim();
+  const fm = document.getElementById('fm');
+
+  if (!name || !email || !message) {
+    fm.style.display = 'block';
+    fm.style.color = '#f87171';
+    fm.textContent = '⚠️ Please fill in all fields.';
+    return;
+  }
+
+  const btn = document.querySelector('#contact .bp');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+  emailjs.send(
+    "service_8yfw9uq",   // 🔑 Replace with your EmailJS Service ID
+    "template_im9qz0a",  // 🔑 Replace with your EmailJS Template ID
+    { name: name, message: message, time: new Date().toLocaleString('en-IN', {timeZone:'Asia/Kolkata'}), from_email: email }
+  ).then(() => {
+    fm.style.display = 'block';
+    fm.style.color = 'var(--accent2)';
+    fm.textContent = '✅ Message sent! I\'ll get back to you soon.';
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+    btn.disabled = false;
+    document.getElementById('from_name').value = '';
+    document.getElementById('from_email').value = '';
+    document.getElementById('message').value = '';
+  }).catch((err) => {
+    fm.style.display = 'block';
+    fm.style.color = '#f87171';
+    fm.textContent = '❌ Failed to send. Please try again or email directly.';
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+    btn.disabled = false;
+    console.error('EmailJS error:', err);
+  });
+}
+
 const html=document.documentElement,tb=document.getElementById('tb');
 tb.addEventListener('click',()=>{const d=html.getAttribute('data-theme')==='dark';html.setAttribute('data-theme',d?'light':'dark');tb.innerHTML=d?'<i class="fas fa-moon"></i>':'<i class="fas fa-sun"></i>'});
 document.getElementById('hbg').addEventListener('click',()=>document.getElementById('nl').classList.toggle('open'));
@@ -363,7 +415,6 @@ document.getElementById('nl').querySelectorAll('a').forEach(a=>a.addEventListene
 const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:.1});
 document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
 document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})}));
-function hf(e){e.preventDefault();document.getElementById('fm').style.display='block';}
 </script>
 </body>
 </html>
